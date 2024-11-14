@@ -1,21 +1,94 @@
 import tkinter as tk
 import customtkinter as ctk
+import json
+import os
 
-# Create the main application window
-root = ctk.CTk()  # Use CTk instead of Tk() for a customtkinter window
-root.title("CustomTkinter Example")  # Set the title of the window
-root.geometry("400x300")  # Set the window size
+def show_about():
+    ctk.CTkMessagebox(title="About", message="This is a basic linear algebra calculator.")
 
-# Add a label
-label = ctk.CTkLabel(root, text="Hello, CustomTkinter!", font=("Arial", 20))
-label.pack(pady=20)
+def change_appearance_mode(new_mode: str):
+    ctk.set_appearance_mode(new_mode)
+    save_appearance_mode(new_mode)
 
-# Add a button that changes the label text
-def change_text():
-    label.configure(text="You clicked the button!")  # Use 'configure' instead of 'config'
+def save_appearance_mode(mode):
+    with open("settings.json", "w") as f:
+        json.dump({"appearance_mode": mode}, f)
 
-button = ctk.CTkButton(root, text="Click Me", command=change_text)
-button.pack(pady=10)
+def load_appearance_mode():
+    if os.path.exists("settings.json"):
+        with open("settings.json", "r") as f:
+            settings = json.load(f)
+            return settings.get("appearance_mode", "light")
+    return "light"  # Default to light mode if no saved preference
+
+def show_matrix_calculator():
+    hide_all_frames()
+    matrix_calculator_frame.grid(row=0, column=0, padx=10, pady=10)
+
+def show_vector_calculator():
+    hide_all_frames()
+    vector_calculator_frame.grid(row=0, column=0, padx=10, pady=10)
+
+def hide_all_frames():
+    matrix_calculator_frame.grid_forget()
+    vector_calculator_frame.grid_forget()
+
+def create_matrix_calculator_page():
+    global matrix_calculator_frame
+    matrix_calculator_frame = ctk.CTkFrame(root)
+    matrix_label = ctk.CTkLabel(matrix_calculator_frame, text="Matrix Calculator", font=("Arial", 24))
+    matrix_label.grid(row=0, column=0, padx=10, pady=10)
+
+def create_vector_calculator_page():
+    global vector_calculator_frame
+    vector_calculator_frame = ctk.CTkFrame(root)
+    vector_label = ctk.CTkLabel(vector_calculator_frame, text="Vector Calculator", font=("Arial", 24))
+    vector_label.grid(row=0, column=0, padx=10, pady=10)
+
+# Initialize main window
+root = ctk.CTk()
+root.title("Linear Algebra Calculator")
+root.geometry("600x400")
+
+# Load the saved appearance mode
+initial_mode = load_appearance_mode()
+ctk.set_appearance_mode(initial_mode)
+ctk.set_default_color_theme("dark-blue")
+
+# Create the initial frames (pages)
+create_matrix_calculator_page()
+create_vector_calculator_page()
+
+# Create the top menu using Tkinter's Menu class
+menu_bar = tk.Menu(root)
+
+# File menu with dropdown
+file_menu = tk.Menu(menu_bar, tearoff=0)
+file_menu.add_command(label="New", command=lambda: print("New File"))
+file_menu.add_command(label="Open", command=lambda: print("Open File"))
+file_menu.add_command(label="Exit", command=root.quit)
+menu_bar.add_cascade(label="File", menu=file_menu)
+
+# Operations menu with dropdown
+operations_menu = tk.Menu(menu_bar, tearoff=0)
+operations_menu.add_command(label="Matrix Calculator", command=show_matrix_calculator)
+operations_menu.add_command(label="Vector Calculator", command=show_vector_calculator)
+menu_bar.add_cascade(label="Operations", menu=operations_menu)
+
+# Dark Mode, Light Mode, and System menu
+appearance_menu = tk.Menu(menu_bar, tearoff=0)
+appearance_menu.add_command(label="Light Mode", command=lambda: change_appearance_mode("light"))
+appearance_menu.add_command(label="Dark Mode", command=lambda: change_appearance_mode("dark"))
+appearance_menu.add_command(label="System", command=lambda: change_appearance_mode("system"))
+menu_bar.add_cascade(label="Appearance", menu=appearance_menu)
+
+# Help menu with an About option
+help_menu = tk.Menu(menu_bar, tearoff=0)
+help_menu.add_command(label="About", command=show_about)
+menu_bar.add_cascade(label="Help", menu=help_menu)
+
+# Configure the menu bar
+root.config(menu=menu_bar)
 
 # Start the application
 root.mainloop()
