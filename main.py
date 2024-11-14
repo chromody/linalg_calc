@@ -1,5 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
+from matrix_calculator import create_matrix_calculator_page
+from vector_calculator import create_vector_calculator_page
 import json
 import os
 
@@ -33,18 +35,6 @@ def hide_all_frames():
     matrix_calculator_frame.grid_forget()
     vector_calculator_frame.grid_forget()
 
-def create_matrix_calculator_page():
-    global matrix_calculator_frame
-    matrix_calculator_frame = ctk.CTkFrame(root)
-    matrix_label = ctk.CTkLabel(matrix_calculator_frame, text="Matrix Calculator", font=("Arial", 24))
-    matrix_label.grid(row=0, column=0, padx=10, pady=10)
-
-def create_vector_calculator_page():
-    global vector_calculator_frame
-    vector_calculator_frame = ctk.CTkFrame(root)
-    vector_label = ctk.CTkLabel(vector_calculator_frame, text="Vector Calculator", font=("Arial", 24))
-    vector_label.grid(row=0, column=0, padx=10, pady=10)
-
 # Initialize main window
 root = ctk.CTk()
 root.title("Linear Algebra Calculator")
@@ -56,8 +46,8 @@ ctk.set_appearance_mode(initial_mode)
 ctk.set_default_color_theme("dark-blue")
 
 # Create the initial frames (pages)
-create_matrix_calculator_page()
-create_vector_calculator_page()
+matrix_calculator_frame = create_matrix_calculator_page(root)
+vector_calculator_frame = create_vector_calculator_page(root)
 
 # Create the top menu using Tkinter's Menu class
 menu_bar = tk.Menu(root)
