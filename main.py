@@ -1,14 +1,16 @@
-import tkinter as tk
+import tkinter as tk #using tkinter and customtkinter for our gui
 import customtkinter as ctk
-from matrix_calculator import create_matrix_calculator_page
+from matrix_calculator import create_matrix_calculator_page #splitting our "pages" into their respective files, for scalability
 from vector_calculator import create_vector_calculator_page
-import json
+import json #we use json and os for appearance preferences
 import os
+from CTkMessagebox import CTkMessagebox
 
 def show_about():
-    ctk.CTkMessagebox(title="About", message="This is a basic linear algebra calculator.")
+    CTkMessagebox(title="About", message="This is a basic linear algebra calculator.")
 
-def change_appearance_mode(new_mode: str):
+
+def change_appearance_mode(new_mode: str): #change the appearance mode
     ctk.set_appearance_mode(new_mode)
     save_appearance_mode(new_mode)
 
