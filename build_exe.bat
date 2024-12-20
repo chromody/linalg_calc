@@ -1,0 +1,1 @@
+start_enviro.bat && pyinstaller --onefile main.py
